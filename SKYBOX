@@ -1,0 +1,74 @@
+-- Create the ScreenGui
+local screenGui = Instance.new("ScreenGui")
+screenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+
+-- Create the Frame
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 300, 0, 200)
+frame.Position = UDim2.new(0.5, -150, 0.5, -100)
+frame.BackgroundColor3 = Color3.new(0, 0, 0)
+frame.Draggable = true
+frame.Active = true
+frame.Parent = screenGui
+
+-- Create the TextLabel
+local textLabel = Instance.new("TextLabel")
+textLabel.Size = UDim2.new(1, 0, 0, 50)
+textLabel.Position = UDim2.new(0, 0, 0, 0)
+textLabel.BackgroundColor3 = Color3.new(0, 0, 0)
+textLabel.TextColor3 = Color3.new(1, 1, 1)
+textLabel.Text = "Skybox 2.11"
+textLabel.Parent = frame
+
+-- Create the TextBox for Asset ID input
+local assetIdBox = Instance.new("TextBox")
+assetIdBox.Size = UDim2.new(0.8, 0, 0, 50)
+assetIdBox.Position = UDim2.new(0.1, 0, 0.4, 0)
+assetIdBox.BackgroundColor3 = Color3.new(1, 1, 1)
+assetIdBox.TextColor3 = Color3.new(0, 0, 0)
+assetIdBox.PlaceholderText = "Enter Asset ID"
+assetIdBox.Parent = frame
+
+-- Create the ImageLabel to show the asset
+local imageLabel = Instance.new("ImageLabel")
+imageLabel.Size = UDim2.new(0.8, 0, 0.3, 0)
+imageLabel.Position = UDim2.new(0.1, 0, 0.65, 0)
+imageLabel.BackgroundColor3 = Color3.new(0, 0, 0)
+imageLabel.Parent = frame
+
+-- Create the Button
+local button = Instance.new("TextButton")
+button.Size = UDim2.new(0.8, 0, 0, 50)
+button.Position = UDim2.new(0.1, 0, 1.0, 0)
+button.BackgroundColor3 = Color3.new(0, 1, 0)
+button.TextColor3 = Color3.new(1, 1, 1)
+button.Text = "SET SKYBOX"
+button.Parent = frame
+
+-- Function to set the Skybox
+local function setSkybox(assetId)
+    local skybox = Instance.new("Sky")
+    skybox.SkyboxBk = "rbxassetid://" .. assetId
+    skybox.SkyboxDn = "rbxassetid://" .. assetId
+    skybox.SkyboxFt = "rbxassetid://" .. assetId
+    skybox.SkyboxLf = "rbxassetid://" .. assetId
+    skybox.SkyboxRt = "rbxassetid://" .. assetId
+    skybox.SkyboxUp = "rbxassetid://" .. assetId
+    skybox.Parent = game.Lighting
+end
+
+-- Update ImageLabel with the Asset ID entered
+assetIdBox:GetPropertyChangedSignal("Text"):Connect(function()
+    local assetId = assetIdBox.Text
+    imageLabel.Image = "rbxassetid://" .. assetId
+end)
+
+-- Button click event
+button.MouseButton1Click:Connect(function()
+    local assetId = assetIdBox.Text
+    if assetId and tonumber(assetId) then
+        setSkybox(assetId)
+    else
+        print("Invalid Asset ID")
+    end
+end)
